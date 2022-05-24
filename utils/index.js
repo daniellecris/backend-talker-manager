@@ -1,4 +1,5 @@
 const fs = require('fs/promises');
+const crypto = require('crypto');
 
 const readFile = async () => {
   const data = await fs.readFile('talker.json', 'utf-8');
@@ -10,7 +11,12 @@ const writeFile = async (data) => {
   await fs.writeFile('talker.json', stringifyData, 'utf-8');
 };
 
+function generateToken() {
+  return crypto.randomBytes(8).toString('hex');
+}
+
 module.exports = {
   readFile,
   writeFile,
+  generateToken,
 };
