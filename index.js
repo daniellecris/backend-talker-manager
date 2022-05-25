@@ -18,6 +18,16 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+// get com sarch pesquisa - req 8
+app.get('/talker/search', validateToken, async (req, res) => {
+  const talker = await readFile();
+  const { q } = req.query;
+
+  const result = talker.filter((elem) => elem.name.includes(q));
+
+  return res.status(200).json(result);
+});
+
 app.get('/talker', async (_req, res) => {
   const talker = await readFile();
 
@@ -75,17 +85,6 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   res.status(204).end();
 });
 
-// get com sarch pesquisa - req 8
-// app.get('/talker/search?q=searchTerm', async (req, res) => {
-//   const talker = await readFile();
-//   const { name } = req.params;
-
-//   const result = talker.find((elem) => elem.name === name);
-
-//   if (!result) {
-//     return res.status();
-//   }
-// });
 
 app.listen(PORT, () => {
   console.log(`Online ${PORT}`);
