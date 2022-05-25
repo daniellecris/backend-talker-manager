@@ -64,14 +64,16 @@ app.post('/talker', validateToken, validateName,
 });
 
 // delete talker/id - req 7
-// app.delete('/talker/:id', validateToken, async (req, res) => {
-//   const talker = await readFile();
-//   const { id } = req.params;
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const talker = await readFile();
+  const { id } = req.params;
 
-//   if (talker.find((t) => t.id === +id)) {
-//     return res.status(204).json();
-//   }
-// });
+  const result = talker.filter((t) => t.id !== +id);
+
+  await writeFile(result);
+
+  res.status(204).end();
+});
 
 // get com sarch pesquisa - req 8
 // app.get('/talker/search?q=searchTerm', async (req, res) => {
