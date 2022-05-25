@@ -85,7 +85,6 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   res.status(204).end();
 });
 
-
 app.listen(PORT, () => {
   console.log(`Online ${PORT}`);
 });
