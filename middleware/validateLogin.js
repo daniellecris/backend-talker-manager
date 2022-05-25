@@ -1,5 +1,3 @@
-const express = require('express');
-
 const validatelogin = (req, res, next) => {
   const { email, password } = req.body;
 

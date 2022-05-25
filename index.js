@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readFile, generateToken } = require('./utils');
+const { writeFile, readFile, generateToken } = require('./utils');
 const { users } = require('./login');
-const { validatelogin } = require('./middleware/validatelogin');
+const { validatelogin } = require('./middleware/validateLogin');
+const { validateTalker } = require('./middleware/validateTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,12 +37,34 @@ app.get('/talker/:id', async (req, res) => {
 app.post('/login', validatelogin, (req, res) => {
   const { email, password } = req.body;
 
-  validatelogin();
-
   users.push({ email, password });
 
   return res.status(200).json({ token: generateToken() });
 });
+
+// app.post('/talker', validateTalker, async (req, res) => {
+//   const talker = await readFile();
+
+//   const { name, age, talk } = req.body;
+
+//   talker.push({ id: Math.max(...talker.map((t) => t.id)) + 1, name, age, talk });
+
+//   await writeFile(talker);
+
+//   return res.status(201).json({ id: Math.max(...talker.map((t) => t.id)) + 1, name, age, talk });
+// });
+
+// get com sarch pesquisa
+// app.get('/talker/search?q=searchTerm', async (req, res) => {
+//   const talker = await readFile();
+//   const { name } = req.params;
+
+//   const result = talker.find((elem) => elem.name === name);
+
+//   if (!result) {
+//     return res.status();
+//   }
+// });
 
 app.listen(PORT, () => {
   console.log(`Online ${PORT}`);
