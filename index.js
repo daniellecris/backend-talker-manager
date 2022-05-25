@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { writeFile, readFile, generateToken } = require('./utils');
+const { readFile, generateToken } = require('./utils');
 const { users } = require('./login');
 const { validatelogin } = require('./middleware/validateLogin');
-const { validateTalker } = require('./middleware/validateTalker');
+// const { validateTalker } = require('./middleware/validateTalker');
 
 const app = express();
 app.use(bodyParser.json());
