@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { readFile, generateToken } = require('./utils');
 const { users } = require('./login');
+const { validatelogin } = require('./middleware/validatelogin');
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,8 +14,6 @@ const PORT = '3000';
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
-
-// app.get('/test', (req, res) => res.status(200).json({ message: 'Rota teste' }));
 
 app.get('/talker', async (_req, res) => {
   const talker = await readFile();
@@ -34,8 +33,10 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(result);
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', validatelogin, (req, res) => {
   const { email, password } = req.body;
+
+  validatelogin();
 
   users.push({ email, password });
 
