@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readFile, generateToken } = require('./utils');
+const { writeFile, readFile, generateToken } = require('./utils');
 const { users } = require('./login');
 const { validatelogin } = require('./middleware/validateLogin');
-// const { validateTalker } = require('./middleware/validateTalker');
+const { validateToken, validateName,
+        validateAge, validateTalk, 
+        validateWatchedAt } = require('./middleware/validateTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -42,19 +44,36 @@ app.post('/login', validatelogin, (req, res) => {
   return res.status(200).json({ token: generateToken() });
 });
 
-// app.post('/talker', validateTalker, async (req, res) => {
+// req 5
+app.post('/talker', validateToken, validateName, 
+          validateAge, validateTalk,
+          validateWatchedAt, async (req, res) => {
+  const talker = await readFile();
+
+  const { name, age, talk: { watchedAt, rate } } = req.body;
+
+  const newTalker = {
+     id: Math.max(...talker.map((t) => t.id)) + 1, name, age, talk: { watchedAt, rate },
+    };
+
+  talker.push(newTalker);
+
+  await writeFile(talker);
+
+  return res.status(201).json(newTalker);
+});
+
+// delete talker/id - req 7
+// app.delete('/talker/:id', validateToken, async (req, res) => {
 //   const talker = await readFile();
+//   const { id } = req.params;
 
-//   const { name, age, talk } = req.body;
-
-//   talker.push({ id: Math.max(...talker.map((t) => t.id)) + 1, name, age, talk });
-
-//   await writeFile(talker);
-
-//   return res.status(201).json({ id: Math.max(...talker.map((t) => t.id)) + 1, name, age, talk });
+//   if (talker.find((t) => t.id === +id)) {
+//     return res.status(204).json();
+//   }
 // });
 
-// get com sarch pesquisa
+// get com sarch pesquisa - req 8
 // app.get('/talker/search?q=searchTerm', async (req, res) => {
 //   const talker = await readFile();
 //   const { name } = req.params;
